@@ -24,9 +24,18 @@ func _ready():
 
 
 func _fixed_process(delta):
+	var hips = get_node("hips")
+	var hipsbone = skeleton.find_bone("hips")
+	var hipstrans = skeleton.get_bone_global_pose(hipsbone)
+	hipstrans.origin = hips.get_global_transform().origin
+	hipstrans.basis = hips.get_global_transform().basis
+	skeleton.set_bone_global_pose(hipsbone, hipstrans)
 	for d in bonebody.keys():
 		var bone = skeleton.find_bone(bonebody[d])
-		skeleton.set_bone_global_pose(bone, get_node(d).get_global_transform())
+		var t = skeleton.get_bone_global_pose(bone)
+		t.basis = get_node(d).get_global_transform().basis
+		#t.origin = get_node(d).get_global_transform().origin WTF?
+		skeleton.set_bone_global_pose(bone, t)
 
 
 
